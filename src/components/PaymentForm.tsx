@@ -3,10 +3,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 interface PaymentFormProps {
+  nomeCartao: string;
   numeroCartao: string;
   validadeCartao: string;
   cvv: string;
   parcelas: "1" | "2";
+  onCardNameChange: (value: string) => void;
   onCardNumberChange: (value: string) => void;
   onValidityChange: (value: string) => void;
   onCvvChange: (value: string) => void;
@@ -14,10 +16,12 @@ interface PaymentFormProps {
 }
 
 export const PaymentForm = ({
+  nomeCartao,
   numeroCartao,
   validadeCartao,
   cvv,
   parcelas,
+  onCardNameChange,
   onCardNumberChange,
   onValidityChange,
   onCvvChange,
@@ -25,6 +29,13 @@ export const PaymentForm = ({
 }: PaymentFormProps) => {
   return (
     <div className="space-y-4">
+      <Input
+        placeholder="Nome no Cartão"
+        value={nomeCartao}
+        onChange={(e) => onCardNameChange(e.target.value)}
+        required
+        className="border-gray-300 focus:ring-black"
+      />
       <Input
         placeholder="Número do cartão"
         value={numeroCartao}

