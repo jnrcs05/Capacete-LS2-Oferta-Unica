@@ -44,6 +44,51 @@ Frete: Grátis
 ================================`;
   };
 
+  const handlePhoneChange = (value: string) => {
+    // Remove tudo que não for número
+    const numbers = value.replace(/\D/g, "");
+    
+    // Aplica a máscara (XX) XXXXX-XXXX
+    let formatted = numbers;
+    if (numbers.length <= 11) {
+      formatted = numbers.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+    }
+    
+    setFormData({ ...formData, telefone: formatted });
+  };
+
+  const handleCardNumberChange = (value: string) => {
+    // Remove tudo que não for número
+    const numbers = value.replace(/\D/g, "");
+    
+    // Aplica a máscara XXXX XXXX XXXX XXXX
+    let formatted = numbers;
+    if (numbers.length <= 16) {
+      formatted = numbers.replace(/(\d{4})(?=\d)/g, "$1 ");
+    }
+    
+    setFormData({ ...formData, numeroCartao: formatted });
+  };
+
+  const handleCardValidityChange = (value: string) => {
+    // Remove tudo que não for número
+    const numbers = value.replace(/\D/g, "");
+    
+    // Aplica a máscara MM/AA
+    let formatted = numbers;
+    if (numbers.length <= 4) {
+      formatted = numbers.replace(/^(\d{2})(\d{2}).*/, "$1/$2");
+    }
+    
+    setFormData({ ...formData, validadeCartao: formatted });
+  };
+
+  const handleCvvChange = (value: string) => {
+    // Remove tudo que não for número e limita a 3 dígitos
+    const numbers = value.replace(/\D/g, "").slice(0, 3);
+    setFormData({ ...formData, cvv: numbers });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -93,7 +138,7 @@ Frete: Grátis
           <Input
             placeholder="Nome completo"
             value={formData.nome}
-            onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, nome: e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "") })}
             required
             className="border-gray-300 focus:ring-black"
           />
@@ -105,6 +150,7 @@ Frete: Grátis
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             className="border-gray-300 focus:ring-black"
           />
         </div>
@@ -112,8 +158,9 @@ Frete: Grátis
           <Input
             placeholder="Telefone"
             value={formData.telefone}
-            onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+            onChange={(e) => handlePhoneChange(e.target.value)}
             required
+            maxLength={15}
             className="border-gray-300 focus:ring-black"
           />
         </div>
@@ -130,8 +177,9 @@ Frete: Grátis
           <Input
             placeholder="Número do cartão"
             value={formData.numeroCartao}
-            onChange={(e) => setFormData({ ...formData, numeroCartao: e.target.value })}
+            onChange={(e) => handleCardNumberChange(e.target.value)}
             required
+            maxLength={19}
             className="border-gray-300 focus:ring-black"
           />
         </div>
@@ -139,15 +187,17 @@ Frete: Grátis
           <Input
             placeholder="Validade (MM/AA)"
             value={formData.validadeCartao}
-            onChange={(e) => setFormData({ ...formData, validadeCartao: e.target.value })}
+            onChange={(e) => handleCardValidityChange(e.target.value)}
             required
+            maxLength={5}
             className="border-gray-300 focus:ring-black"
           />
           <Input
             placeholder="CVV"
             value={formData.cvv}
-            onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
+            onChange={(e) => handleCvvChange(e.target.value)}
             required
+            maxLength={3}
             className="border-gray-300 focus:ring-black"
           />
         </div>
