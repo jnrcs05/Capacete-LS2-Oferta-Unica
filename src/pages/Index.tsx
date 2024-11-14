@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import CountdownTimer from "@/components/CountdownTimer";
 
 const Index = () => {
   const images = [
@@ -30,8 +31,11 @@ const Index = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8 space-y-12">
-        {/* Hero Section */}
+        {/* Hero Section with Countdown */}
         <section className="text-center space-y-4 animate-fade-in">
+          <div className="flex justify-center mb-6">
+            <CountdownTimer />
+          </div>
           <Badge variant="secondary" className="mb-4">
             Promoção Especial
           </Badge>
