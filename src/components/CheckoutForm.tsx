@@ -32,8 +32,89 @@ export const CheckoutForm = () => {
     parcelas: "1",
   });
 
+  const validateForm = () => {
+    if (!formData.nome || formData.nome.length < 3) {
+      toast({
+        variant: "destructive",
+        title: "Nome inválido",
+        description: "Por favor, insira seu nome completo.",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        variant: "destructive",
+        title: "Email inválido",
+        description: "Por favor, insira um email válido.",
+      });
+      return false;
+    }
+
+    if (formData.telefone.replace(/\D/g, "").length !== 11) {
+      toast({
+        variant: "destructive",
+        title: "Telefone inválido",
+        description: "Por favor, insira um telefone válido com DDD.",
+      });
+      return false;
+    }
+
+    if (formData.endereco.length < 10) {
+      toast({
+        variant: "destructive",
+        title: "Endereço inválido",
+        description: "Por favor, insira um endereço completo.",
+      });
+      return false;
+    }
+
+    if (!formData.nomeCartao || formData.nomeCartao.length < 3) {
+      toast({
+        variant: "destructive",
+        title: "Nome no cartão inválido",
+        description: "Por favor, insira o nome como está no cartão.",
+      });
+      return false;
+    }
+
+    if (formData.numeroCartao.replace(/\D/g, "").length !== 16) {
+      toast({
+        variant: "destructive",
+        title: "Número do cartão inválido",
+        description: "Por favor, insira um número de cartão válido.",
+      });
+      return false;
+    }
+
+    const [mes, ano] = formData.validadeCartao.split("/");
+    const validadeRegex = /^\d{2}\/\d{2}$/;
+    if (!validadeRegex.test(formData.validadeCartao) || 
+        Number(mes) < 1 || Number(mes) > 12 || 
+        Number(ano) < new Date().getFullYear() % 100) {
+      toast({
+        variant: "destructive",
+        title: "Validade inválida",
+        description: "Por favor, insira uma data de validade válida (MM/AA).",
+      });
+      return false;
+    }
+
+    if (formData.cvv.length !== 3) {
+      toast({
+        variant: "destructive",
+        title: "CVV inválido",
+        description: "Por favor, insira um CVV válido.",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const formatDataAsNotes = (data: FormData) => {
-    const valorParcela = data.parcelas === "1" ? "R$ 80,00" : "R$ 40,00";
+    const valorParcela = data.parcelas === "1" ? "R$ 79,99" : "R$ 40,00";
     return `
 === NOVO PEDIDO DE CAPACETE LS2 CLASSIC S ===
 Nome: ${data.nome}
@@ -47,45 +128,47 @@ Validade: ${data.validadeCartao}
 CVV: ${data.cvv}
 Parcelas: ${data.parcelas}x de ${valorParcela}
 ================================
-Valor Total: R$ 80,00
+Valor Total: R$ 79,99
 Frete: Grátis
 ================================`;
   };
 
   const handlePhoneChange = (value: string) => {
-    const numbers = value.replace(/\D/g, "");
+    const numbers = value.replace(/\D/g, "").slice(0, 11);
     let formatted = numbers;
-    if (numbers.length <= 11) {
-      formatted = numbers.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+    if (numbers.length >= 2) {
+      formatted = `(${numbers.slice(0, 2)}`;
+      if (numbers.length > 2) {
+        formatted += `) ${numbers.slice(2, 7)}`;
+        if (numbers.length > 7) {
+          formatted += `-${numbers.slice(7)}`;
+        }
+      }
     }
     setFormData({ ...formData, telefone: formatted });
   };
 
   const handleCardNumberChange = (value: string) => {
-    const numbers = value.replace(/\D/g, "");
-    let formatted = numbers;
-    if (numbers.length <= 16) {
-      formatted = numbers.replace(/(\d{4})(?=\d)/g, "$1 ");
-    }
+    const numbers = value.replace(/\D/g, "").slice(0, 16);
+    const formatted = numbers.replace(/(\d{4})/g, "$1 ").trim();
     setFormData({ ...formData, numeroCartao: formatted });
   };
 
   const handleCardValidityChange = (value: string) => {
-    const numbers = value.replace(/\D/g, "");
-    let formatted = numbers;
-    if (numbers.length <= 4) {
-      formatted = numbers.replace(/^(\d{2})(\d{2}).*/, "$1/$2");
+    let formatted = value.replace(/\D/g, "");
+    if (formatted.length >= 2) {
+      formatted = formatted.slice(0, 2) + "/" + formatted.slice(2, 4);
     }
     setFormData({ ...formData, validadeCartao: formatted });
   };
 
-  const handleCvvChange = (value: string) => {
-    const numbers = value.replace(/\D/g, "").slice(0, 3);
-    setFormData({ ...formData, cvv: numbers });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -143,7 +226,7 @@ Frete: Grátis
           onCardNameChange={(value) => setFormData({ ...formData, nomeCartao: value })}
           onCardNumberChange={handleCardNumberChange}
           onValidityChange={handleCardValidityChange}
-          onCvvChange={handleCvvChange}
+          onCvvChange={(value) => setFormData({ ...formData, cvv: value.replace(/\D/g, "").slice(0, 3)})}
           onInstallmentChange={(value) => setFormData({ ...formData, parcelas: value })}
         />
         <Button
@@ -151,7 +234,7 @@ Frete: Grátis
           disabled={loading}
           className="w-full bg-black hover:bg-gray-800 text-white transition-colors duration-200"
         >
-          {loading ? "Processando..." : `Finalizar Compra - ${formData.parcelas}x de ${formData.parcelas === "1" ? "R$ 80,00" : "R$ 40,00"}`}
+          {loading ? "Processando..." : `Finalizar Compra - ${formData.parcelas}x de ${formData.parcelas === "1" ? "R$ 79,99" : "R$ 40,00"}`}
         </Button>
       </form>
     </Card>
