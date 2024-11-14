@@ -1,19 +1,43 @@
 import { CheckoutForm } from "@/components/CheckoutForm";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
+  const images = [
+    "/images/helmet-1.jpg",
+    "/images/helmet-2.jpg",
+    "/images/helmet-3.jpg",
+    "/images/helmet-4.jpg",
+    "/images/helmet-5.jpg",
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      <div className="container mx-auto px-4 py-12 space-y-12">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-6 mb-8">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold text-center">
+            Capacetes LS2 - Qualidade e Segurança
+          </h1>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8 space-y-12">
         {/* Hero Section */}
         <section className="text-center space-y-4 animate-fade-in">
           <Badge variant="secondary" className="mb-4">
             Promoção Especial
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
             CAPACETE LS2 CLASSIC S
-          </h1>
+          </h2>
           <p className="text-gray-600 text-lg">
             Monocolor Preto - Edição Limitada
           </p>
@@ -22,14 +46,23 @@ const Index = () => {
         {/* Product Section */}
         <section className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 animate-slide-in">
-            <div className="relative group">
-              <img
-                src="/placeholder.svg"
-                alt="LS2 Capacete"
-                className="w-full rounded-lg shadow-xl transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300 rounded-lg" />
-            </div>
+            <Carousel className="w-full max-w-xl mx-auto">
+              <CarouselContent>
+                {images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative aspect-square">
+                      <img
+                        src={image}
+                        alt={`LS2 Capacete Vista ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
 
           <div className="space-y-6 animate-fade-in">
