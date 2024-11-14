@@ -71,7 +71,7 @@ export const PaymentForm = ({
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="1" id="1x" />
-            <Label htmlFor="1x">1x de R$ 80,00</Label>
+            <Label htmlFor="1x">1x de R$ 79,99</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="2" id="2x" />

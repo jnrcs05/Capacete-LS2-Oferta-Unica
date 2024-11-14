@@ -18,9 +18,9 @@ const CountdownTimer = () => {
   }, [minutes, seconds]);
 
   return (
-    <div className="bg-red-600 text-white py-3 px-6 rounded-lg shadow-lg animate-pulse">
-      <p className="text-lg font-bold mb-1">Oferta por tempo limitado!</p>
-      <div className="text-3xl font-bold">
+    <div className="bg-red-600 text-white py-6 px-12 rounded-lg shadow-lg animate-pulse w-full max-w-2xl mx-auto mb-8">
+      <p className="text-2xl font-bold mb-2">Oferta por tempo limitado!</p>
+      <div className="text-5xl font-bold">
         {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
       </div>
     </div>

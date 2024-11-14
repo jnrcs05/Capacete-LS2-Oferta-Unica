@@ -12,11 +12,11 @@ import CountdownTimer from "@/components/CountdownTimer";
 
 const Index = () => {
   const images = [
-    "/images/helmet-1.jpg",
-    "/images/helmet-2.jpg",
-    "/images/helmet-3.jpg",
-    "/images/helmet-4.jpg",
-    "/images/helmet-5.jpg",
+    "/images/helmet-1.png",
+    "/images/helmet-2.png",
+    "/images/helmet-3.png",
+    "/images/helmet-4.png",
+    "/images/helmet-5.png",
   ];
 
   return (
@@ -33,7 +33,7 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8 space-y-12">
         {/* Hero Section with Countdown */}
         <section className="text-center space-y-4 animate-fade-in">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center">
             <CountdownTimer />
           </div>
           <Badge variant="secondary" className="mb-4">
@@ -75,7 +75,7 @@ const Index = () => {
                 <Badge className="bg-red-500 text-white hover:bg-red-600">
                   Queima de Estoque
                 </Badge>
-                <h2 className="text-3xl font-bold">R$ 80,00</h2>
+                <h2 className="text-3xl font-bold">R$ 79,99</h2>
                 <p className="text-gray-600">
                   Frete Grátis para todo Brasil
                 </p>
